@@ -19,7 +19,10 @@ RUN apt -y update && \
     dpkg-reconfigure -f noninteractive tzdata && \
     localedef -i ja_JP -c -f UTF-8 -A /usr/share/locale/locale.alias ja_JP.UTF-8 && \
     adduser --gecos "" --disabled-login "${TARGET_USER}" && \
-    echo "${TARGET_USER}:${TARGET_USER}" | chpasswd
+    echo "${TARGET_USER}:${TARGET_USER}" | chpasswd && \
+    SUDOERS_FILE="/etc/sudoers.d/${TARGET_USER}" && \
+    echo "${TARGET_USER} ALL=(ALL) NOPASSWD: ALL" > "${SUDOERS_FILE}" && \
+    chmod 440 "${SUDOERS_FILE}"
 
 ENV LANG ja_JP.utf8
 
